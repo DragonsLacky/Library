@@ -3,6 +3,7 @@ package mk.emt.lab.library.web.controller;
 import mk.emt.lab.library.model.Book;
 import mk.emt.lab.library.model.dto.BookDto;
 import mk.emt.lab.library.model.exception.AuthorNotFoundException;
+import mk.emt.lab.library.model.exception.BookDoesNotHaveAvailableCopiesException;
 import mk.emt.lab.library.model.exception.BookNotFoundException;
 import mk.emt.lab.library.model.exception.CategoryNotFoundException;
 import mk.emt.lab.library.repository.BookRepository;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value={"","/books"})
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping(value={"","/api/books"})
 public class BookController {
     
     private final BookService bookService;
@@ -46,6 +48,13 @@ public class BookController {
     public ResponseEntity<Book> editBook(@PathVariable Long id, @RequestBody BookDto bookDto) throws AuthorNotFoundException, BookNotFoundException {
         return this.bookService.edit(id, bookDto)
                 .map(book -> ResponseEntity.ok().body(book))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+    
+    @PutMapping("/mark/{id}")
+    public ResponseEntity markBook(@PathVariable Long id) throws BookNotFoundException, BookDoesNotHaveAvailableCopiesException {
+        return bookService.markTaken(id)
+                .map((book) -> ResponseEntity.ok().build())
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
     
