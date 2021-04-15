@@ -54,14 +54,14 @@ const ProductAdd = (props) => {
                     </div>
                     <div className={"form-group"}>
                         <label>Author</label>
-                        <select name={"manufacturer"} className={"form-control"} onChange={handleChange}>
+                        <select name={"author"} className={"form-control"} onChange={handleChange}>
                             {props.authors.map((author) =>
                                 <option value={author.id}>{author.name + ' ' + author.surname}</option>
                             )}
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="name">Available  copies</label>
+                        <label htmlFor="availableCopies">Available  copies</label>
                         <input type={"number"}
                                min={0}
                                className={"form-control"}
